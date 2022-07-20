@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:paintball_app/constants/color.dart';
 import 'package:paintball_app/controllers/login_controller.dart';
+import 'package:paintball_app/views/home_view.dart';
+import 'package:paintball_app/views/sign_up_view.dart';
 
 import '../widgets/app_logo_widget.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -93,7 +95,7 @@ class LoginView extends StatelessWidget {
                         child: SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => Get.to(() => HomeView()),
                             style: ElevatedButton.styleFrom(
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
@@ -129,22 +131,25 @@ class LoginView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Don\'t have account? ',
-                            style: GoogleFonts.dmSans(
-                              color: yellow,
-                              fontSize: 15,
-                            ),
-                          ),
-                          Text('Sign-Up Here',
+                      InkWell(
+                        onTap: () => Get.to(() => SignUpView()),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Don\'t have account? ',
                               style: GoogleFonts.dmSans(
-                                  color: yellow,
-                                  fontSize: 15,
-                                  decoration: TextDecoration.underline)),
-                        ],
+                                color: yellow,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text('Sign-Up Here',
+                                style: GoogleFonts.dmSans(
+                                    color: yellow,
+                                    fontSize: 15,
+                                    decoration: TextDecoration.underline)),
+                          ],
+                        ),
                       )
                     ],
                   ),
