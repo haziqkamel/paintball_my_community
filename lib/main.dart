@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paintball_app/constants/color.dart';
-import 'package:paintball_app/views/login_view.dart';
+import 'package:paintball_app/routes/route_generator.dart';
+import 'package:paintball_app/routes/route_path.dart';
 
 void main() {
   runZonedGuarded(() => runApp(const MyApp()), (error, stack) {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: yellowMaterialColor,
       ),
-      home: LoginView(),
+      initialRoute: SPLASHSCREEN,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

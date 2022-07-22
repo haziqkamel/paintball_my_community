@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:paintball_app/constants/color.dart';
 import 'package:paintball_app/controllers/login_controller.dart';
-import 'package:paintball_app/views/home_view.dart';
+import 'package:paintball_app/utils/app_utils.dart';
 import 'package:paintball_app/views/sign_up_view.dart';
 
 import '../widgets/app_logo_widget.dart';
@@ -41,117 +43,81 @@ class LoginView extends StatelessWidget {
                   thickness: 1,
                   color: yellow,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const LabelTextWidget(
-                        labelText: 'Username',
-                        fontSize: 15,
-                      ),
-                      const CustomTextFormField(
-                        hintText: 'Your username',
-                      ),
-                      const SizedBox(height: 15),
-                      const LabelTextWidget(
-                        labelText: 'Password',
-                        fontSize: 15,
-                      ),
-                      Obx(
-                        () => CustomTextFormField(
-                          hintText: 'Your password',
-                          textObscure: !_controller.isObscure.value,
-                          suffixIcon: Obx(
-                            () => IconButton(
-                              onPressed: _controller.onObscurePressed,
-                              icon: Icon(
-                                _controller.isObscure.value
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                Form(
+                  key: _controller.globalKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const LabelTextWidget(
+                          labelText: 'Username',
+                          fontSize: 15,
+                        ),
+                        CustomTextFormField(
+                          hintText: 'Your username',
+                          controller: _controller.controllerUsername,
+                          focusNode: _controller.usernameFocus,
+                          onFieldSubmitted: (txt) => AppUtils.changeFocusNode(
+                            context: context,
+                            node: _controller.passwordFocus,
+                          ),
+                          validator: (val) => AppUtils.usernameValidator(
+                              val, _controller.controllerUsername),
+                        ),
+                        const SizedBox(height: 15),
+                        const LabelTextWidget(
+                          labelText: 'Password',
+                          fontSize: 15,
+                        ),
+                        Obx(
+                          () => CustomTextFormField(
+                            controller: _controller.controllerPassword,
+                            hintText: 'Your password',
+                            focusNode: _controller.passwordFocus,
+                            textObscure: !_controller.isObscure.value,
+                            validator: (val) => AppUtils.passwordValidator(
+                                val, _controller.controllerPassword),
+                            suffixIcon: Obx(
+                              () => IconButton(
+                                onPressed: _controller.onObscurePressed,
+                                icon: Icon(
+                                  _controller.isObscure.value
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: yellow,
+                                ),
                                 color: yellow,
                               ),
-                              color: yellow,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 11),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: null,
-                          child: Text(
-                            'Forgot Password ?',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 15,
-                              color: yellow.withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () => Get.to(() => HomeView()),
-                            style: ElevatedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
+                        const SizedBox(height: 11),
+                        buildForgotPassword(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () => _controller.onSubmit(),
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: Text(
-                              'Log In',
-                              style: GoogleFonts.dmSans(fontSize: 15),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          'Or Continue With',
-                          style:
-                              GoogleFonts.dmSans(fontSize: 15, color: yellow),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              buildLoginIcon('assets/logo/fb_logo3x.png'),
-                              buildLoginIcon('assets/logo/google_logo3x.png'),
-                              buildLoginIcon('assets/logo/apple_logo3x.png'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => Get.to(() => SignUpView()),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have account? ',
-                              style: GoogleFonts.dmSans(
-                                color: yellow,
-                                fontSize: 15,
+                              child: Text(
+                                'Log In',
+                                style: GoogleFonts.dmSans(fontSize: 15),
                               ),
                             ),
-                            Text('Sign-Up Here',
-                                style: GoogleFonts.dmSans(
-                                    color: yellow,
-                                    fontSize: 15,
-                                    decoration: TextDecoration.underline)),
-                          ],
+                          ),
                         ),
-                      )
-                    ],
+                        buildLoginWithSocialMedia(),
+                        buildDontHaveAccount()
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20)
@@ -160,6 +126,75 @@ class LoginView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildForgotPassword() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: GestureDetector(
+        onTap: null,
+        child: Text(
+          'Forgot Password ?',
+          style: GoogleFonts.dmSans(
+            fontSize: 15,
+            color: yellow.withOpacity(0.5),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildDontHaveAccount() {
+    return InkWell(
+      onTap: () => Get.to(() => SignUpView()),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Don\'t have account? ',
+            style: GoogleFonts.dmSans(
+              color: yellow,
+              fontSize: 15,
+            ),
+          ),
+          Text('Sign-Up Here',
+              style: GoogleFonts.dmSans(
+                  color: yellow,
+                  fontSize: 15,
+                  decoration: TextDecoration.underline)),
+        ],
+      ),
+    );
+  }
+
+  Widget buildLoginWithSocialMedia() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            'Or Continue With',
+            style: GoogleFonts.dmSans(fontSize: 15, color: yellow),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: SizedBox(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                buildLoginIcon('assets/logo/fb_logo3x.png'),
+                buildLoginIcon('assets/logo/google_logo3x.png'),
+                if (Platform.isIOS)
+                  buildLoginIcon('assets/logo/apple_logo3x.png'),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

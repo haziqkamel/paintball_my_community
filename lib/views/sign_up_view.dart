@@ -153,27 +153,27 @@ class SignUpView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Center(
-                        //   child: Text(
-                        //     'Or Continue With',
-                        //     style:
-                        //         GoogleFonts.dmSans(fontSize: 15, color: yellow),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(vertical: 20),
-                        //   child: SizedBox(
-                        //     width: double.infinity,
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         buildLoginIcon('assets/logo/fb_logo3x.png'),
-                        //         buildLoginIcon('assets/logo/google_logo3x.png'),
-                        //         buildLoginIcon('assets/logo/apple_logo3x.png'),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
+                        Center(
+                          child: Text(
+                            'Or Continue With',
+                            style:
+                                GoogleFonts.dmSans(fontSize: 15, color: yellow),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buildLoginIcon('assets/logo/fb_logo3x.png'),
+                                buildLoginIcon('assets/logo/google_logo3x.png'),
+                                buildLoginIcon('assets/logo/apple_logo3x.png'),
+                              ],
+                            ),
+                          ),
+                        ),
                         InkWell(
                           onTap: () => Get.back(),
                           child: Row(
