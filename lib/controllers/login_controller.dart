@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:paintball_app/routes/route_path.dart';
 import 'package:paintball_app/utils/app_utils.dart';
 
 class LoginController extends GetxController {
@@ -37,7 +38,7 @@ class LoginController extends GetxController {
     if (globalKey.currentState!.validate()) {
       print('Okay!');
       //TODO: Firebase Authentication
-      Get.offAndToNamed('home');
+      Get.offAndToNamed(HOME);
     } else {
       AppUtils.showSnackBar('Invalid form!');
     }
