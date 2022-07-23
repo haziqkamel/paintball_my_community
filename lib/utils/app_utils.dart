@@ -55,4 +55,14 @@ class AppUtils {
   static void changeFocusNode(
           {required BuildContext context, required FocusNode node}) =>
       FocusScope.of(context).requestFocus(node);
+
+  static showOverlayLoading() {
+    showDialog(
+      context: Get.context!,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 }

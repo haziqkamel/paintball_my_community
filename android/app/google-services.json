@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746661213979",
+    "project_id": "paintball-malaysia-community",
+    "storage_bucket": "paintball-malaysia-community.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746661213979:android:2f444592edea8d886705be",
+        "android_client_info": {
+          "package_name": "dev.hk.paintball_malaysia_community"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746661213979-rd5h6mgves3suu601u08ml1gccl38h6u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBDuupJ7Sk8Ix_bqUEdYLAxKTJ8_KM5uQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746661213979-rd5h6mgves3suu601u08ml1gccl38h6u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

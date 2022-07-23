@@ -11,6 +11,7 @@ class News {
   String? newsContentImage;
   String newsMoreDescription;
   String shareUrl;
+  bool isMocked;
   News({
     required this.id,
     required this.newsTitle,
@@ -22,6 +23,7 @@ class News {
     this.newsContentImage,
     required this.newsMoreDescription,
     required this.shareUrl,
+    this.isMocked = true,
   });
 
   News copyWith({
@@ -35,6 +37,7 @@ class News {
     String? newsContentImage,
     String? newsMoreDescription,
     String? shareUrl,
+    bool? isMocked,
   }) {
     return News(
       id: id ?? this.id,
@@ -47,6 +50,7 @@ class News {
       newsContentImage: newsContentImage ?? this.newsContentImage,
       newsMoreDescription: newsMoreDescription ?? this.newsMoreDescription,
       shareUrl: shareUrl ?? this.shareUrl,
+      isMocked: isMocked ?? this.isMocked,
     );
   }
 
@@ -62,6 +66,7 @@ class News {
       'newsContentImage': newsContentImage,
       'newsMoreDescription': newsMoreDescription,
       'shareUrl': shareUrl,
+      'isMocked': isMocked,
     };
   }
 
@@ -77,6 +82,7 @@ class News {
       newsContentImage: map['newsContentImage'],
       newsMoreDescription: map['newsMoreDescription'] ?? '',
       shareUrl: map['shareUrl'] ?? '',
+      isMocked: map['isMocked'] ?? false,
     );
   }
 
@@ -86,7 +92,7 @@ class News {
 
   @override
   String toString() {
-    return 'News(id: $id, newsTitle: $newsTitle, newsHeadImage: $newsHeadImage, newsDescription: $newsDescription, authorImageUrl: $authorImageUrl, authorName: $authorName, newsPostedOn: $newsPostedOn, newsContentImage: $newsContentImage, newsMoreDescription: $newsMoreDescription, shareUrl: $shareUrl)';
+    return 'News(id: $id, newsTitle: $newsTitle, newsHeadImage: $newsHeadImage, newsDescription: $newsDescription, authorImageUrl: $authorImageUrl, authorName: $authorName, newsPostedOn: $newsPostedOn, newsContentImage: $newsContentImage, newsMoreDescription: $newsMoreDescription, shareUrl: $shareUrl, isMocked: $isMocked)';
   }
 
   @override
@@ -103,7 +109,8 @@ class News {
         other.newsPostedOn == newsPostedOn &&
         other.newsContentImage == newsContentImage &&
         other.newsMoreDescription == newsMoreDescription &&
-        other.shareUrl == shareUrl;
+        other.shareUrl == shareUrl &&
+        other.isMocked == isMocked;
   }
 
   @override
@@ -117,23 +124,7 @@ class News {
         newsPostedOn.hashCode ^
         newsContentImage.hashCode ^
         newsMoreDescription.hashCode ^
-        shareUrl.hashCode;
+        shareUrl.hashCode ^
+        isMocked.hashCode;
   }
-}
-
-class NewsRepository {
-  final List<News> newsRepo = [
-    News(
-        id: '1',
-        newsTitle: 'New Kids On',
-        newsHeadImage: '',
-        newsDescription:
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-        authorImageUrl: '',
-        authorName: 'Eddie Munson',
-        newsPostedOn: '18 July 2022',
-        newsMoreDescription:
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren',
-        shareUrl: '')
-  ];
 }

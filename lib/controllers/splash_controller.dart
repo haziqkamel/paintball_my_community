@@ -9,7 +9,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> delay() async {
-    await Future.delayed(const Duration(seconds: 5))
-        .then((value) => Get.offAndToNamed(LOGIN));
+    await Future.delayed(const Duration(seconds: 2))
+        .then((_) => Get.offAndToNamed(LOGIN));
   }
 }

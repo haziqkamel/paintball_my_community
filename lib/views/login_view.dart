@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import '../widgets/app_logo_widget.dart';
 import '../widgets/custom_text_form_field.dart';
 import '../widgets/label_text_widget.dart';
 import '../widgets/outline_text_widget.dart';
+import 'home_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({Key? key}) : super(key: key);
@@ -26,104 +28,116 @@ class LoginView extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: null,
         backgroundColor: black,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppLogoWidget(),
-                const Spacer(),
-                const OutlineTextWidget(
-                  text: 'LOGIN',
-                  fontSize: 25,
-                  color: yellow,
-                ),
-                const Divider(
-                  thickness: 1,
-                  color: yellow,
-                ),
-                Form(
-                  key: _controller.globalKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const LabelTextWidget(
-                          labelText: 'Username',
-                          fontSize: 15,
-                        ),
-                        CustomTextFormField(
-                          hintText: 'Your username',
-                          controller: _controller.controllerUsername,
-                          focusNode: _controller.usernameFocus,
-                          onFieldSubmitted: (txt) => AppUtils.changeFocusNode(
-                            context: context,
-                            node: _controller.passwordFocus,
-                          ),
-                          validator: (val) => AppUtils.usernameValidator(
-                              val, _controller.controllerUsername),
-                        ),
-                        const SizedBox(height: 15),
-                        const LabelTextWidget(
-                          labelText: 'Password',
-                          fontSize: 15,
-                        ),
-                        Obx(
-                          () => CustomTextFormField(
-                            controller: _controller.controllerPassword,
-                            hintText: 'Your password',
-                            focusNode: _controller.passwordFocus,
-                            textObscure: !_controller.isObscure.value,
-                            validator: (val) => AppUtils.passwordValidator(
-                                val, _controller.controllerPassword),
-                            suffixIcon: Obx(
-                              () => IconButton(
-                                onPressed: _controller.onObscurePressed,
-                                icon: Icon(
-                                  _controller.isObscure.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: yellow,
-                                ),
-                                color: yellow,
+        body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HomeView();
+            } else {
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const AppLogoWidget(),
+                      const Spacer(),
+                      const OutlineTextWidget(
+                        text: 'LOGIN',
+                        fontSize: 25,
+                        color: yellow,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: yellow,
+                      ),
+                      Form(
+                        key: _controller.globalKey,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const LabelTextWidget(
+                                labelText: 'Email',
+                                fontSize: 15,
                               ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 11),
-                        buildForgotPassword(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 25),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () => _controller.onSubmit(),
-                              style: ElevatedButton.styleFrom(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
+                              CustomTextFormField(
+                                hintText: 'Your email',
+                                controller: _controller.controllerEmail,
+                                focusNode: _controller.usernameFocus,
+                                onFieldSubmitted: (txt) =>
+                                    AppUtils.changeFocusNode(
+                                  context: context,
+                                  node: _controller.passwordFocus,
+                                ),
+                                validator: (val) => AppUtils.emailValidator(
+                                    val, _controller.controllerEmail),
+                              ),
+                              const SizedBox(height: 15),
+                              const LabelTextWidget(
+                                labelText: 'Password',
+                                fontSize: 15,
+                              ),
+                              Obx(
+                                () => CustomTextFormField(
+                                  controller: _controller.controllerPassword,
+                                  hintText: 'Your password',
+                                  focusNode: _controller.passwordFocus,
+                                  textObscure: !_controller.isObscure.value,
+                                  validator: (val) =>
+                                      AppUtils.passwordValidator(
+                                          val, _controller.controllerPassword),
+                                  suffixIcon: Obx(
+                                    () => IconButton(
+                                      onPressed: _controller.onObscurePressed,
+                                      icon: Icon(
+                                        _controller.isObscure.value
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: yellow,
+                                      ),
+                                      color: yellow,
+                                    ),
                                   ),
                                 ),
                               ),
-                              child: Text(
-                                'Log In',
-                                style: GoogleFonts.dmSans(fontSize: 15),
+                              const SizedBox(height: 11),
+                              buildForgotPassword(),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 25),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () => _controller.onSubmit(),
+                                    style: ElevatedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Log In',
+                                      style: GoogleFonts.dmSans(fontSize: 15),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              buildLoginWithSocialMedia(),
+                              buildDontHaveAccount()
+                            ],
                           ),
                         ),
-                        buildLoginWithSocialMedia(),
-                        buildDontHaveAccount()
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20)
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20)
-              ],
-            ),
-          ),
+              );
+            }
+          },
         ),
       ),
     );
