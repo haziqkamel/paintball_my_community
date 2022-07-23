@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:paintball_app/main.dart';
 import 'package:paintball_app/utils/app_utils.dart';
+import 'package:paintball_app/utils/firebase_utils.dart';
 
 class SignUpController extends GetxController {
   RxBool isObscure = false.obs;
@@ -49,22 +52,30 @@ class SignUpController extends GetxController {
     isPromotionalChecked.value = isChecked;
   }
 
-  onSubmit() {
+  onSubmit() async {
     FocusScope.of(Get.context!).unfocus();
+
+    AppUtils.showOverlayLoading();
+
     if (formState.currentState!.validate() && isPdpaChecked.value) {
-      print('Okay to navigate!');
-      //TODO: Firebase Authentication
-    } else if (!isPdpaChecked.value) {
-      Get.defaultDialog(
-        title: 'Required!',
-        contentPadding: const EdgeInsets.all(8),
-        content: const Text(
-          'Please accept the Privacy Policy to continue.',
-          textAlign: TextAlign.center,
-        ),
-      );
+      try {
+        final userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        )
+            .then((_) async {
+          User? user = FirebaseUtils.firebaseUser;
+          await user?.updateDisplayName(usernameController.text.trim());
+        });
+        print(userCredential.toString());
+      } on FirebaseAuthException catch (e) {
+        AppUtils.showSnackBar(e.message.toString());
+      }
     } else {
-      AppUtils.showSnackBar('Invalid Form');
+      AppUtils.showSnackBar(
+          'Incomplete form. Please fill up required field and agree to Terms and Conditions and Privacy Policy');
     }
+    navigatorKey.currentState!.pop();
   }
 }

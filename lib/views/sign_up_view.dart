@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:paintball_app/controllers/signup_controller.dart';
 import 'package:paintball_app/utils/app_utils.dart';
+import 'package:paintball_app/views/home_view.dart';
 
 import '../constants/color.dart';
 import '../widgets/app_logo_widget.dart';
@@ -22,34 +24,42 @@ class SignUpView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: null,
-        backgroundColor: black,
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const AppLogoWidget(),
-                  const OutlineTextWidget(
-                    text: 'USER SIGN-UP',
-                    fontSize: 25,
-                    color: yellow,
+          resizeToAvoidBottomInset: false,
+          appBar: null,
+          backgroundColor: black,
+          body: StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return HomeView();
+              } else {
+                return SingleChildScrollView(
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const AppLogoWidget(),
+                          const OutlineTextWidget(
+                            text: 'USER SIGN-UP',
+                            fontSize: 25,
+                            color: yellow,
+                          ),
+                          const Divider(
+                            thickness: 1,
+                            color: yellow,
+                          ),
+                          buildFormSignUp(context),
+                          const SizedBox(height: 20)
+                        ],
+                      ),
+                    ),
                   ),
-                  const Divider(
-                    thickness: 1,
-                    color: yellow,
-                  ),
-                  buildFormSignUp(context),
-                  const SizedBox(height: 20)
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+                );
+              }
+            },
+          )),
     );
   }
 
