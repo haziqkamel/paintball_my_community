@@ -12,6 +12,7 @@ class News {
   String newsMoreDescription;
   String shareUrl;
   bool isMocked;
+  String type;
   News({
     required this.id,
     required this.newsTitle,
@@ -24,6 +25,7 @@ class News {
     required this.newsMoreDescription,
     required this.shareUrl,
     this.isMocked = true,
+    required this.type,
   });
 
   News copyWith({
@@ -38,6 +40,7 @@ class News {
     String? newsMoreDescription,
     String? shareUrl,
     bool? isMocked,
+    String? type,
   }) {
     return News(
       id: id ?? this.id,
@@ -51,6 +54,7 @@ class News {
       newsMoreDescription: newsMoreDescription ?? this.newsMoreDescription,
       shareUrl: shareUrl ?? this.shareUrl,
       isMocked: isMocked ?? this.isMocked,
+      type: type ?? this.type,
     );
   }
 
@@ -67,6 +71,7 @@ class News {
       'newsMoreDescription': newsMoreDescription,
       'shareUrl': shareUrl,
       'isMocked': isMocked,
+      'type': type,
     };
   }
 
@@ -83,6 +88,7 @@ class News {
       newsMoreDescription: map['newsMoreDescription'] ?? '',
       shareUrl: map['shareUrl'] ?? '',
       isMocked: map['isMocked'] ?? false,
+      type: map['type'] ?? '',
     );
   }
 
@@ -92,39 +98,41 @@ class News {
 
   @override
   String toString() {
-    return 'News(id: $id, newsTitle: $newsTitle, newsHeadImage: $newsHeadImage, newsDescription: $newsDescription, authorImageUrl: $authorImageUrl, authorName: $authorName, newsPostedOn: $newsPostedOn, newsContentImage: $newsContentImage, newsMoreDescription: $newsMoreDescription, shareUrl: $shareUrl, isMocked: $isMocked)';
+    return 'News(id: $id, newsTitle: $newsTitle, newsHeadImage: $newsHeadImage, newsDescription: $newsDescription, authorImageUrl: $authorImageUrl, authorName: $authorName, newsPostedOn: $newsPostedOn, newsContentImage: $newsContentImage, newsMoreDescription: $newsMoreDescription, shareUrl: $shareUrl, isMocked: $isMocked, type: $type)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is News &&
-        other.id == id &&
-        other.newsTitle == newsTitle &&
-        other.newsHeadImage == newsHeadImage &&
-        other.newsDescription == newsDescription &&
-        other.authorImageUrl == authorImageUrl &&
-        other.authorName == authorName &&
-        other.newsPostedOn == newsPostedOn &&
-        other.newsContentImage == newsContentImage &&
-        other.newsMoreDescription == newsMoreDescription &&
-        other.shareUrl == shareUrl &&
-        other.isMocked == isMocked;
+      other.id == id &&
+      other.newsTitle == newsTitle &&
+      other.newsHeadImage == newsHeadImage &&
+      other.newsDescription == newsDescription &&
+      other.authorImageUrl == authorImageUrl &&
+      other.authorName == authorName &&
+      other.newsPostedOn == newsPostedOn &&
+      other.newsContentImage == newsContentImage &&
+      other.newsMoreDescription == newsMoreDescription &&
+      other.shareUrl == shareUrl &&
+      other.isMocked == isMocked &&
+      other.type == type;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        newsTitle.hashCode ^
-        newsHeadImage.hashCode ^
-        newsDescription.hashCode ^
-        authorImageUrl.hashCode ^
-        authorName.hashCode ^
-        newsPostedOn.hashCode ^
-        newsContentImage.hashCode ^
-        newsMoreDescription.hashCode ^
-        shareUrl.hashCode ^
-        isMocked.hashCode;
+      newsTitle.hashCode ^
+      newsHeadImage.hashCode ^
+      newsDescription.hashCode ^
+      authorImageUrl.hashCode ^
+      authorName.hashCode ^
+      newsPostedOn.hashCode ^
+      newsContentImage.hashCode ^
+      newsMoreDescription.hashCode ^
+      shareUrl.hashCode ^
+      isMocked.hashCode ^
+      type.hashCode;
   }
 }

@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:paintball_app/constants/color.dart';
 import 'package:paintball_app/controllers/home_controller.dart';
+import 'package:paintball_app/repositories/news_repo.dart';
 import 'package:paintball_app/widgets/outline_text_widget.dart';
 
+import '../widgets/home_card_news.dart';
 import '../widgets/left_text_menu_widget.dart';
 
 class HomeView extends StatelessWidget {
@@ -31,7 +33,7 @@ class HomeView extends StatelessWidget {
               Row(
                 children: [
                   buildLeftTextMenu(),
-                  buildHomeCardView(),
+                  Obx(() => buildHomeCardView()),
                 ],
               ),
               buildHomeBottomNavigation(),
@@ -83,7 +85,7 @@ class HomeView extends StatelessWidget {
                   decoration: _controller.menuIndex.value == 1
                       ? BoxDecoration(
                           color: yellow,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(15),
                         )
                       : null,
                   child: SizedBox(
@@ -172,83 +174,38 @@ class HomeView extends StatelessWidget {
   }
 
   Widget buildHomeCardView() {
-    return Expanded(
-      flex: 7,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image1.png',
-                  fit: BoxFit.cover,
-                ),
+    return _controller.sideMenuIndex.value == 0
+        ? Expanded(
+            flex: 7,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              child: Row(
+                children: [
+                  ...NewsRepository().newsRepo.map(
+                        (news) => HomeCardNewsWidget(news: news),
+                      ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image2.png',
-                  fit: BoxFit.cover,
+          )
+        : _controller.sideMenuIndex.value == 1
+            ? Expanded(
+                flex: 7,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  child: Row(
+                    children: [
+                      ...NewsRepository().newsRepo.map(
+                            (news) => HomeCardNewsWidget(news: news),
+                          ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image3.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image4.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image5.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 450,
-                width: 450,
-                child: Image.asset(
-                  'assets/samples/sample_image6.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+              )
+            : Expanded(flex: 7, child: Container());
   }
 
   Widget buildLeftTextMenu() {
@@ -265,10 +222,10 @@ class HomeView extends StatelessWidget {
             children: [
               Obx(
                 () => InkWell(
-                  onTap: () => _controller.onSideMenuIndexPressed(0),
+                  onTap: () => _controller.onSideMenuIndexPressed(2),
                   child: LeftTextMenu(
                     title: 'MarketPlace',
-                    isSelected: _controller.sideMenuIndex.value == 0,
+                    isSelected: _controller.sideMenuIndex.value == 2,
                   ),
                 ),
               ),
@@ -283,10 +240,10 @@ class HomeView extends StatelessWidget {
               ),
               Obx(
                 () => InkWell(
-                  onTap: () => _controller.onSideMenuIndexPressed(2),
+                  onTap: () => _controller.onSideMenuIndexPressed(0),
                   child: LeftTextMenu(
                     title: 'News',
-                    isSelected: _controller.sideMenuIndex.value == 2,
+                    isSelected: _controller.sideMenuIndex.value == 0,
                   ),
                 ),
               ),
@@ -342,38 +299,46 @@ class HomeView extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 20),
-          SizedBox(
-            height: 56,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Welcome',
-                  style: GoogleFonts.dmSans(
-                    color: yellow,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+          Expanded(
+            child: SizedBox(
+              height: 56,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Welcome',
+                    style: GoogleFonts.dmSans(
+                      color: yellow,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                Text(
-                  'User_123',
-                  style: GoogleFonts.dmSans(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
+                  Text(
+                    _controller.userProfile?.displayName ??
+                        _controller.userProfile?.email ??
+                        'New User',
+                    style: GoogleFonts.dmSans(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
             ),
           ),
-          const Spacer(),
-          InkWell(
-            onTap: () {},
-            child: SizedBox(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: InkWell(
+              onTap: () {},
+              child: SizedBox(
                 width: 24,
                 height: 24,
-                child: Image.asset('assets/icons/ic_rect_menu2x.png')),
+                child: Image.asset('assets/icons/ic_rect_menu2x.png'),
+              ),
+            ),
           ),
         ],
       ),

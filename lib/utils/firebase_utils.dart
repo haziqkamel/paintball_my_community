@@ -20,7 +20,7 @@ class FirebaseUtils {
       });
 
   // Subscribe current id token changes
-  static subbscribeCurrentIdTokenChanges() =>
+  static subscribeCurrentIdTokenChanges() =>
       FirebaseAuth.instance.idTokenChanges().listen((User? user) {
         if (user == null) {
           print('User is currently signed out!');
@@ -39,7 +39,7 @@ class FirebaseUtils {
         }
       });
 
-  static get firebaseUser => FirebaseAuth.instance.currentUser;
+  static User? get firebaseUser => FirebaseAuth.instance.currentUser;
 
   static signIn({required String email, required String password}) async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(

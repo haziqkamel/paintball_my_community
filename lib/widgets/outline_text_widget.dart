@@ -17,6 +17,7 @@ class OutlineTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.clip,
       style: GoogleFonts.russoOne(
         fontSize: fontSize,
         foreground: Paint()

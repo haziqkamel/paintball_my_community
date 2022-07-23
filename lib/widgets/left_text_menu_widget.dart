@@ -15,12 +15,16 @@ class LeftTextMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: GoogleFonts.dmSans(
-          fontWeight: FontWeight.w500,
-          color: isSelected ? yellow : Colors.grey,
-          fontSize: 15),
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Text(
+        title,
+        style: GoogleFonts.dmSans(
+            fontWeight: FontWeight.w500,
+            color: isSelected ? yellow : Colors.grey,
+            decoration: isSelected ? TextDecoration.underline : null,
+            fontSize: 15),
+      ),
     );
   }
 }

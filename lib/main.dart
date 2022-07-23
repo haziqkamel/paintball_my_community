@@ -11,8 +11,9 @@ import 'package:paintball_app/utils/firebase_utils.dart';
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseUtils.signOut();
+    await FirebaseUtils.init();
+    FirebaseUtils
+        .signOut(); //TODO: Automatically signout user each time restart as there is no signout function yet
     runApp(const MyApp());
   }, (error, stack) {
     print(error);
