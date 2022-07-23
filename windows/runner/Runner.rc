@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "paintball_app" "\0"
+            VALUE "CompanyName", "dev.hk" "\0"
+            VALUE "FileDescription", "paintball_malaysia_community" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "paintball_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
+            VALUE "InternalName", "paintball_malaysia_community" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022 dev.hk. All rights reserved." "\0"
             VALUE "OriginalFilename", "paintball_app.exe" "\0"
-            VALUE "ProductName", "paintball_app" "\0"
+            VALUE "ProductName", "paintball_malaysia_community" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
