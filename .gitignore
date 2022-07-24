@@ -50,3 +50,8 @@ firebase.json
 firestore.indexes.json
 firestore.rules
 storage.rules
+
+# Google API Key
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+
