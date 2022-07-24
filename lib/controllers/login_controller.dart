@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:paintball_app/main.dart';
 import 'package:paintball_app/utils/app_utils.dart';
-import 'package:paintball_app/utils/firebase_utils.dart';
+import 'package:paintball_app/utils/firebase_authentication.dart';
 
 class LoginController extends GetxController {
   RxBool isObscure = false.obs;
@@ -41,7 +41,7 @@ class LoginController extends GetxController {
 
     if (globalKey.currentState!.validate()) {
       try {
-        await FirebaseUtils.signIn(
+        await FirebaseAuthentication.signIn(
             email: controllerEmail.text, password: controllerPassword.text);
       } on FirebaseAuthException catch (e) {
         print('FirebaseAuthException: $e');
@@ -50,6 +50,9 @@ class LoginController extends GetxController {
     } else {
       AppUtils.showSnackBar('Invalid form!');
     }
+
+    controllerEmail.clear();
+    controllerPassword.clear();
 
     navigatorKey.currentState!.pop();
   }

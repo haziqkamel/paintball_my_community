@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:paintball_app/models/tournaments_model.dart';
 import 'package:paintball_app/widgets/outline_text_widget.dart';
 
 import '../constants/color.dart';
-import '../models/news_model.dart';
 
-class HomeCardNewsWidget extends StatelessWidget {
-  const HomeCardNewsWidget({Key? key, required this.news}) : super(key: key);
+class HomeTournamentsCard extends StatelessWidget {
+  const HomeTournamentsCard({
+    Key? key,
+    required this.tournaments,
+  }) : super(key: key);
 
-  final News news;
+  final Tournaments tournaments;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SizedBox(
         height: 450,
         width: 280,
@@ -27,7 +30,7 @@ class HomeCardNewsWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 child: Image.asset(
-                  news.newsHeadImage,
+                  tournaments.headImage,
                   fit: BoxFit.cover,
                   height: double.infinity,
                   width: double.infinity,
@@ -66,7 +69,7 @@ class HomeCardNewsWidget extends StatelessWidget {
                                 vertical: 2, horizontal: 10),
                             child: Center(
                               child: Text(
-                                news.type,
+                                tournaments.type,
                                 style: GoogleFonts.dmSans(
                                     fontSize: 12, color: yellow),
                               ),
@@ -83,45 +86,40 @@ class HomeCardNewsWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: SizedBox(
-                        width: 165,
-                        height: 66,
                         child: OutlineTextWidget(
-                            text: news.newsTitle, fontSize: 25, color: yellow),
+                            text: tournaments.title, fontSize: 25, color: yellow),
                       ),
                     ),
                     SizedBox(
-                      height: 74,
-                      width: 143,
                       child: Text(
-                        news.newsDescription,
+                        tournaments.subTitle,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
+                        maxLines: 1,
                         style: GoogleFonts.dmSans(
-                            fontSize: 12, color: Colors.white),
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 20,
-                          child: Image.asset(news.authorImageUrl),
-                        ),
-                        const SizedBox(width: 10),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              news.authorName,
+                              tournaments.eventDate,
                               style: GoogleFonts.dmSans(
-                                  fontSize: 9,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
                             Text(
-                              news.newsPostedOn,
+                              tournaments.eventLocation,
                               style: GoogleFonts.dmSans(
-                                  fontSize: 9,
+                                  fontSize: 12,
                                   fontStyle: FontStyle.italic,
                                   color: Colors.white),
                             ),

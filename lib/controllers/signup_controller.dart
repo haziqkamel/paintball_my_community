@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:paintball_app/main.dart';
 import 'package:paintball_app/utils/app_utils.dart';
-import 'package:paintball_app/utils/firebase_utils.dart';
+import 'package:paintball_app/utils/firebase_authentication.dart';
 
 class SignUpController extends GetxController {
   RxBool isObscure = false.obs;
@@ -65,7 +65,7 @@ class SignUpController extends GetxController {
           password: passwordController.text,
         )
             .then((_) async {
-          User? user = FirebaseUtils.firebaseUser;
+          User? user = FirebaseAuthentication.firebaseUser;
           await user?.updateDisplayName(usernameController.text.trim());
         });
         print(userCredential.toString());

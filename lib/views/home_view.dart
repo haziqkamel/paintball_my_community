@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:paintball_app/constants/color.dart';
 import 'package:paintball_app/controllers/home_controller.dart';
-import 'package:paintball_app/repositories/news_repo.dart';
+import 'package:paintball_app/utils/firebase_authentication.dart';
+import 'package:paintball_app/widgets/home_tournaments_card.dart';
+import 'package:paintball_app/widgets/loading_typewriter.dart';
 import 'package:paintball_app/widgets/outline_text_widget.dart';
 
-import '../widgets/home_card_news.dart';
+import '../widgets/home_news_card.dart';
 import '../widgets/left_text_menu_widget.dart';
 
 class HomeView extends StatelessWidget {
@@ -18,6 +20,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
+      endDrawer: const CustomDrawer(),
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -25,20 +28,28 @@ class HomeView extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [Color(0xFF010101), Color(0xFF303030)])),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildHeader(),
-              buildDiscover(),
-              Row(
-                children: [
-                  buildLeftTextMenu(),
-                  Obx(() => buildHomeCardView()),
-                ],
-              ),
-              buildHomeBottomNavigation(),
-              const SizedBox(height: 10),
-            ],
+          child: Obx(
+            () => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: _controller.isFinishLoad.value
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          buildHeader(context),
+                          buildDiscover(),
+                          Row(
+                            children: [
+                              buildLeftTextMenu(),
+                              Obx(
+                                () => buildHomeCardView(),
+                              ),
+                            ],
+                          ),
+                          buildHomeBottomNavigation(),
+                          const SizedBox(height: 10),
+                        ],
+                      )
+                    : const LoadingTypeWriter()),
           ),
         ),
       ),
@@ -177,35 +188,70 @@ class HomeView extends StatelessWidget {
     return _controller.sideMenuIndex.value == 0
         ? Expanded(
             flex: 7,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-              child: Row(
-                children: [
-                  ...NewsRepository().newsRepo.map(
-                        (news) => HomeCardNewsWidget(news: news),
-                      ),
-                ],
-              ),
-            ),
+            child: _controller.newsList.isNotEmpty
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        ..._controller.newsList.map(
+                          (news) => HomeNewsCard(news: news),
+                        ),
+                      ],
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                      'No News Available',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
           )
         : _controller.sideMenuIndex.value == 1
             ? Expanded(
                 flex: 7,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  child: Row(
-                    children: [
-                      ...NewsRepository().newsRepo.map(
-                            (news) => HomeCardNewsWidget(news: news),
-                          ),
-                    ],
-                  ),
-                ),
+                child: _controller.tournamentsList.isNotEmpty
+                    ? SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            ..._controller.tournamentsList.map(
+                              (tournaments) => HomeTournamentsCard(
+                                tournaments: tournaments,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                          'No Tournaments Available',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
               )
-            : Expanded(flex: 7, child: Container());
+            : Expanded(
+                flex: 7,
+                child: _controller.newsList.isNotEmpty
+                    ? SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            ..._controller.newsList.map(
+                              (news) => HomeNewsCard(news: news),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Center(
+                        child: Text(
+                          'No News Available',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+              );
   }
 
   Widget buildLeftTextMenu() {
@@ -282,7 +328,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget buildHeader() {
+  Widget buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 27),
       child: Row(
@@ -295,7 +341,7 @@ class HomeView extends StatelessWidget {
               'assets/icons/ic_profile_placeholder2x.png',
               width: 56,
               height: 56,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(width: 20),
@@ -329,18 +375,108 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: InkWell(
-              onTap: () {},
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: Image.asset('assets/icons/ic_rect_menu2x.png'),
+          Builder(
+            builder: (context) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: InkWell(
+                onTap: () => Scaffold.of(context).openEndDrawer(),
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: Image.asset('assets/icons/ic_rect_menu2x.png'),
+                ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: Colors.black,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                      width: 30,
+                      height: 38,
+                      child: Image.asset('assets/logo/app_logo3x.png')),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child:
+                          Image.asset('assets/icons/ic_rect_menu_close3x.png'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'HOME',
+                  style: GoogleFonts.russoOne(fontSize: 25, color: yellow),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'NEWS',
+                  style: GoogleFonts.russoOne(fontSize: 25, color: yellow),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'TOURNAMENTS',
+                  style: GoogleFonts.russoOne(fontSize: 25, color: yellow),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'MARKETPLACE',
+                  style: GoogleFonts.russoOne(fontSize: 25, color: yellow),
+                ),
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'PLAYER SIGN UP',
+                  style: GoogleFonts.russoOne(fontSize: 25, color: yellow),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const OutlineTextWidget(
+                    text: 'CREATE A TEAM', fontSize: 25, color: yellow),
+              ),
+              TextButton(
+                onPressed: () => FirebaseAuthentication.signOut(),
+                child: const OutlineTextWidget(
+                    text: 'SIGN OUT', fontSize: 16, color: yellow),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

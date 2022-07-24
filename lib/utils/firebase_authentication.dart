@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:paintball_app/routes/route_path.dart';
 
-class FirebaseUtils {
-  static init() async => await Firebase.initializeApp();
+class FirebaseAuthentication {
 
   static Future<void> useFirebaseAuthEmulator() async =>
       await FirebaseAuth.instance.useAuthEmulator('10.0.2.2', 9099);

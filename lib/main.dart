@@ -6,14 +6,17 @@ import 'package:get/get.dart';
 import 'package:paintball_app/constants/color.dart';
 import 'package:paintball_app/routes/route_generator.dart';
 import 'package:paintball_app/routes/route_path.dart';
-import 'package:paintball_app/utils/firebase_utils.dart';
+
+import 'firebase_options.dart';
 
 void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await FirebaseUtils.init();
-    FirebaseUtils
-        .signOut(); //TODO: Automatically signout user each time restart as there is no signout function yet
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // FirebaseUtils
+    //     .signOut();
     runApp(const MyApp());
   }, (error, stack) {
     print(error);

@@ -25,6 +25,7 @@ class RouteGenerator {
           builder: (_) => SignUpView(),
           settings: const RouteSettings(name: SIGNUP),
         );
+        
       case LOGIN:
         return MaterialPageRoute(
           builder: (_) => LoginView(),
